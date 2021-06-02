@@ -14,9 +14,13 @@ func ParseDateString(layout string, dateString string) time.Time {
 	return t
 }
 
-func PickOne(s []string, srcNum int64) string {
+func GenerateRandomNumber(maxNumber int, srcNum int64) int {
 	src := rand.NewSource(srcNum)
 	r := rand.New(src)
-	num := r.Intn(len(s))
-	return s[num]
+	num := r.Intn(maxNumber)
+	return num
+}
+
+func PickOne(s []string, srcNum int64) string {
+	return s[GenerateRandomNumber(len(s), srcNum)]
 }
