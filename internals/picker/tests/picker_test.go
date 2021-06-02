@@ -22,7 +22,7 @@ func TestPickOne(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := picker.PickOne(tt.args.s, int(tt.args.srcNum)); got != tt.want {
+			if got := picker.PickOne(tt.args.s, tt.args.srcNum); got != tt.want {
 				t.Errorf("PickOne() = %v, want %v", got, tt.want)
 			}
 		})
