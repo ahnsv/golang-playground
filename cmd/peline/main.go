@@ -11,11 +11,12 @@ func main() {
 	chanBufSize := 3
 
 	eventChannel := make(chan peline.Payload, chanBufSize)
+	uniqueCountChannel := make(chan peline.Pair, chanBufSize)
 
 	userGroup := []string{"humphrey", "hardy", "thomas", "jeff", "knox", "flash", "grab"}
 
 	go func() {
-		for i := 1; i <= 100; i++ {
+		for i := 1; i <= 1000000; i++ {
 			currentTime := time.Now()
 			currentTimeInInt64 := currentTime.UnixNano()
 
@@ -29,7 +30,8 @@ func main() {
 		}
 	}()
 
-	go peline.RawStage(eventChannel)
+	go peline.RawStage(eventChannel, uniqueCountChannel)
+	go peline.UniqueCountStage(uniqueCountChannel)
 
 	time.Sleep(time.Second * 2)
 }

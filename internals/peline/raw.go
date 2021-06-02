@@ -1,11 +1,13 @@
 package peline
 
-import "fmt"
+import "log"
 
-func RawStage(eventChannel <-chan Payload) {
-	fmt.Println("Raw Stage Start")
+func RawStage(eventChannel <-chan Payload, uniqueCountChannel chan<- Pair) {
+	log.Println("Raw Stage Start")
+	functionName := TraceFunction()
 	for {
 		msg := <-eventChannel
-		fmt.Printf("%v\n", msg)
+		log.Printf("%s: Message Received - %v\n", functionName, msg)
+		uniqueCountChannel <- Pair{Id: msg.Id, Username: msg.Username}
 	}
 }

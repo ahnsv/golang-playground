@@ -9,3 +9,8 @@ type Payload struct {
 	Group     string
 	CreatedAt time.Time
 }
+
+type Pair struct {
+	Id       int
+	Username string
+}
