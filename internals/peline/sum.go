@@ -1,16 +1,31 @@
 package peline
 
-import "log"
+import (
+	"log"
+	"sync"
+)
 
-func SumStage(sumChannel <-chan Payload) {
+type TotalPoint struct {
+	mu  sync.Mutex
+	sum int
+}
+
+func (t *TotalPoint) addPoint(point int) {
+	t.mu.Lock()
+	t.sum += point
+	t.mu.Unlock()
+}
+
+func SumStage(sumChannel <-chan Payload, safePoint *TotalPoint) {
 	functionName := TraceFunction()
 	log.Println("SumStage start")
 
-	totalPoint := 0
-
 	for {
 		msg := <-sumChannel
-		totalPoint += msg.Point
-		log.Printf("%s: totalPoint is now [%v]", functionName, totalPoint)
+
+		totalPoint := safePoint
+		totalPoint.addPoint(msg.Point)
+
+		log.Printf("%s: totalPoint is now [%v]", functionName, totalPoint.sum)
 	}
 }
