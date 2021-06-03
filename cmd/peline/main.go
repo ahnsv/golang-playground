@@ -3,8 +3,8 @@ package main
 import (
 	"time"
 
-	"github.com/ahnsv/golang-playground/internals/peline"
-	"github.com/ahnsv/golang-playground/internals/picker"
+	"github.com/ahnsv/golang-playground/internal/peline"
+	"github.com/ahnsv/golang-playground/internal/picker"
 )
 
 func main() {
@@ -17,7 +17,7 @@ func main() {
 	userGroup := []string{"humphrey", "hardy", "thomas", "jeff", "knox", "flash", "grab"}
 
 	go func() {
-		for i := 1; i <= 100; i++ {
+		for i := 1; i <= 10000; i++ {
 			currentTime := time.Now()
 			currentTimeInInt64 := currentTime.UnixNano()
 

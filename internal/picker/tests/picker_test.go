@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/ahnsv/golang-playground/internals/picker"
+	"github.com/ahnsv/golang-playground/internal/picker"
 )
 
 func TestPickOne(t *testing.T) {
