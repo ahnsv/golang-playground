@@ -1,12 +1,12 @@
 package main
 
 import (
+	"encoding/json"
 	"net/http"
 	"time"
 
 	"github.com/ahnsv/golang-playground/internal/inbound"
 	"github.com/ahnsv/golang-playground/internal/peline"
-	"github.com/ahnsv/golang-playground/internal/picker"
 )
 
 func main() {
@@ -18,22 +18,34 @@ func main() {
 
 	httpServer := inbound.InboundHttp{}
 
-	userGroup := []string{"humphrey", "hardy", "thomas", "jeff", "knox", "flash", "grab"}
+	// id := &peline.PelineId{}
+
+	normalNumber := 1
 	httpServer.AddHandler(
 		"/api/v1/send", func(w http.ResponseWriter, r *http.Request) {
 			if r.Method == "POST" {
-				go func() {
-					currentTime := time.Now()
-					currentTimeInInt64 := currentTime.UnixNano()
 
-					eventChannel <- peline.Payload{
-						Id:        picker.GenerateRandomNumber(1000, currentTimeInInt64),
-						Username:  picker.PickOne(userGroup, currentTimeInInt64),
-						Point:     picker.GenerateRandomNumber(10, currentTimeInInt64),
-						Group:     "DE",
-						CreatedAt: currentTime,
-					}
-				}()
+				var inSchema *peline.PelineInSchema
+
+				err := json.NewDecoder(r.Body).Decode(&inSchema)
+
+				if err != nil {
+					http.Error(w, err.Error(), http.StatusBadRequest)
+					return
+				}
+
+				currentTime := time.Now()
+
+				eventChannel <- peline.Payload{
+					Id:        normalNumber,
+					Username:  *inSchema.Username,
+					Point:     *inSchema.Point,
+					Group:     *inSchema.Group,
+					CreatedAt: currentTime,
+				}
+				normalNumber++
+
+				w.WriteHeader(http.StatusAccepted)
 			}
 		})
 

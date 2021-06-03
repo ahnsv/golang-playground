@@ -1,6 +1,9 @@
 package peline
 
-import "time"
+import (
+	"sync"
+	"time"
+)
 
 type Payload struct {
 	Id        int
@@ -13,4 +16,21 @@ type Payload struct {
 type Pair struct {
 	Id       int
 	Username string
+}
+
+type PelineInSchema struct {
+	Username *string `json:"username"`
+	Point    *int    `json:"point"`
+	Group    *string `json:"group"`
+}
+
+type PelineId struct {
+	mu           sync.Mutex
+	SerialNumber int
+}
+
+func (p *PelineId) Increment() {
+	p.mu.Lock()
+	p.SerialNumber += 1
+	p.mu.Unlock()
 }
